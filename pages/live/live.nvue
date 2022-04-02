@@ -22,7 +22,7 @@
 				</view>
 				
 				<!-- 右侧 -->
-				<view class="user-info-content rounded-circle flex align-center bg-info">
+				<view class="user-info-content rounded-circle flex align-center">
 					<scroll-view scroll-x class="flex-1 flex"  >
 					<view class="p" v-for="i in 20" :key="i">
 							<image class="rounded" src="../../static/tabbar/min.png" style="width: 70rpx;height: 70rpx;" mode=""></image>
@@ -34,12 +34,41 @@
 					</view>
 				</view>
 			</view>
+			
 			<!-- 金币 -->
-			<view class="gold-wrap bg-primary">
+			<view class="gold-wrap flex align-center">
+				<view class="user-info-content rounded-circle bg-danger flex align-center">
+					<view class="p-2">
+						<text class="text-warning">金币</text>
+					</view>
+					<view class="flex-1 flex-column justify-center">
+						<text class="text-white">100</text>
+					</view>
+				</view>
 			</view>
+			
 			<!-- 收到礼物 -->
 			<view class="gift-wrap">
-				<view class="gift-content bg-success"></view>
+				<scroll-view scroll-y class="gift-content">
+					<view class="flex align-center px-3 my-2" v-for="i in 20" key="i">
+						<!-- 左侧 -->
+						<view class="user-info-content p bg-gradient rounded-circle flex align-center">
+							<view class="p">
+								<image class="rounded" src="../../static/tabbar/min.png" style="width: 70rpx;height: 70rpx;" mode=""></image>
+							</view>
+							<view class="flex-1 flex-column justify-center">
+								<text class="text-white font">张波</text>
+								<text class="text-white font-sm">送蛋糕</text>
+							</view>
+							<view class="p">
+								<image class="rounded" src="../../static/gift/1.png" style="width: 70rpx;height: 70rpx;" mode=""></image>
+							</view>
+						</view>
+						
+						<!-- 右侧送出礼物数量 -->
+						<text class="text-warning font-lg ml-1">X 10</text>
+					</view>
+				</scroll-view>
 			</view>
 			
 			<!-- 弹幕 -->
@@ -76,6 +105,10 @@
 
 <style lang="less">
 	.container {
+		/* 渐变颜色 */
+		.bg-gradient {
+			background-image: linear-gradient(to right, #BCABB1, #65AAF0);
+		}
 		/* 
 		由于nvue是基于weex的,weex的布局是Flex,如果需要让.container占满屏幕需要给flex: 1
 	 */
@@ -101,12 +134,19 @@
 				.user-info-content {
 					display: flex;
 					width: 325rpx;
-					// background-color: rgba(0,0,0,.4);
+					background-color: rgba(0,0,0,.4);
 				}
 			}
 
 			.gold-wrap {
 				height: 80rpx;
+				padding: 0 20rpx;
+				margin: 20rpx 0;
+				.user-info-content {
+					display: flex;
+					width: 325rpx;
+					background-color: rgba(0,0,0,.4);
+				}
 			}
 
 			.gift-wrap {
@@ -114,6 +154,10 @@
 				.gift-content {
 					width: 520rpx;
 					height: 500rpx;
+					.user-info-content {
+						display: flex;
+						width: 325rpx;
+					}
 				}
 			}
 			
