@@ -11,10 +11,13 @@
 			<!-- 金币 -->
 			<view class="gold-wrap bg-primary">
 			</view>
-			<!-- 礼物 -->
-			<view class="gift-wrap bg-success">
-				
+			<!-- 收到礼物 -->
+			<view class="gift-wrap">
+				<view class="gift-content bg-success"></view>
 			</view>
+			
+			<!-- 弹幕 -->
+			<view class="barrage-wrap"></view>
 		</view>
 
 		<!-- 底部 -->
@@ -60,16 +63,13 @@
 			right: 0;
 			left: 0;
 			bottom: 0;
-			z-index: 9999;
 		}
 
 		.bottom-wrap {
-			height: 100rpx;
+			height: 120rpx;
 		}
 
 		.header-wrap {
-			background-color: #D39E00;
-
 			.userinfo-wrap {
 				height: 80rpx;
 			}
@@ -80,6 +80,20 @@
 
 			.gift-wrap {
 				height: 500rpx;
+				.gift-content {
+					width: 520rpx;
+					height: 500rpx;
+				}
+			}
+			
+			.barrage-wrap {
+				position: fixed;
+				bottom: 120rpx;
+				left: 0;
+				right: 0;
+				width: 520rpx;
+				height: 300rpx;
+				background-color: lightpink;
 			}
 		}
 	}
