@@ -3,38 +3,51 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"app-plus": {
+					"titleNView": {
+						"titleText": "直播",
+						"titleAlign": "left",
+						"buttons": [{
+							"type": "menu"
+						}]
+					}
+				}
 			}
+		}, {
+			"path": "pages/my/my",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "优播",
+		"navigationBarBackgroundColor": "#8745FF",
+		"backgroundColor": "#FFFFFF"
 	},
 	"tabBar": {
-		"color":"#707070",
-		"selectedColor":"#8745FF",
-		"backgroundColor":"#FFFFFF",
-		"borderStyle":"black",
+		"color": "#707070",
+		"selectedColor": "#8745FF",
+		"backgroundColor": "#FFFFFF",
+		"borderStyle": "black",
 		"midButton": {
-			"iconPath":"static/tabbar/min.png",
-			"iconWidth":"60px",
-			"height":"65px"
-			
+			"iconPath": "static/tabbar/min.png",
+			"iconWidth": "60px",
+			"height": "65px"
+
 		},
-		"list": [
-			{
-				"iconPath":"static/tabbar/find.png",
-				"selectedIconPath":"static/tabbar/find-selected.png",
-				"pagePath":"pages/index/index",
+		"list": [{
+				"iconPath": "static/tabbar/find.png",
+				"selectedIconPath": "static/tabbar/find-selected.png",
+				"pagePath": "pages/index/index",
 				"text": "发现"
 			},
 			{
-				"iconPath":"static/tabbar/my.png",
-				"selectedIconPath":"static/tabbar/my-selected.png",
-				"pagePath":"pages/my/my",
+				"iconPath": "static/tabbar/my.png",
+				"selectedIconPath": "static/tabbar/my-selected.png",
+				"pagePath": "pages/my/my",
 				"text": "我的"
 			}
 		]
