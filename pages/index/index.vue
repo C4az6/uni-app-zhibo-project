@@ -12,7 +12,7 @@
 		
 		<!-- 列表 -->
 		<view class="list-wrap">
-			<view class="list-item" v-for="i in 6">
+			<view class="list-item" v-for="i in 6" @click="openLive">
 				<image class="rounded" src="../../static/demo/1.jpg" mode="aspectFill"></image>
 				<view class="rounded-circle px-2 flex align-center" style="position: absolute;left: 15rpx;top: 15rpx;background-color: rgba(0,0,0,0.4);">
 					<text class="iconfont mr-1 iconbizhongguanli text-warning"></text>
@@ -45,10 +45,14 @@
 			}
 		},
 		onLoad() {
-
+			this.openLive()
 		},
 		methods: {
-
+			openLive() {
+				uni.navigateTo({
+					url:'/pages/live/live'
+				})
+			}
 		}
 	}
 </script>

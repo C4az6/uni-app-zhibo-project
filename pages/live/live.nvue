@@ -1,0 +1,86 @@
+<template>
+	<view class="container">
+		<!-- 全屏视频 -->
+		<video class="video" src="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8" autoplay></video>
+
+		<!-- 头部部分 -->
+		<view class="header-wrap position-fixed right-0 left-0" :style="`top: ${statusBarHeight}px`">
+			<!-- 个人信息|观看详细信息 -->
+			<view class="userinfo-wrap bg-danger">
+			</view>
+			<!-- 金币 -->
+			<view class="gold-wrap bg-primary">
+			</view>
+			<!-- 礼物 -->
+			<view class="gift-wrap bg-success">
+				
+			</view>
+		</view>
+
+		<!-- 底部 -->
+		<view class="bottom-wrap position-fixed bottom-0 right-0 left-0 bg-danger">
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				// 状态栏高度
+				statusBarHeight: 0
+			};
+		},
+		onLoad() {
+			// 获取系统信息，注意单位都是px!!!
+			let res = uni.getSystemInfoSync();
+			this.statusBarHeight = res.statusBarHeight
+			console.log("statusBarHeight: ", this.statusBarHeight)
+		},
+		computed: {
+			getStatusBarHeight() {
+				return 2
+			}
+		}
+	}
+</script>
+
+<style lang="less">
+	.container {
+		/* 
+		由于nvue是基于weex的,weex的布局是Flex,如果需要让.container占满屏幕需要给flex: 1
+	 */
+		flex: 1;
+		background-color: lightgreen;
+
+		.video {
+			flex: 1;
+			position: absolute;
+			top: 0;
+			right: 0;
+			left: 0;
+			bottom: 0;
+			z-index: 9999;
+		}
+
+		.bottom-wrap {
+			height: 100rpx;
+		}
+
+		.header-wrap {
+			background-color: #D39E00;
+
+			.userinfo-wrap {
+				height: 80rpx;
+			}
+
+			.gold-wrap {
+				height: 80rpx;
+			}
+
+			.gift-wrap {
+				height: 500rpx;
+			}
+		}
+	}
+</style>
