@@ -58,7 +58,7 @@
 			</view>
 
 			<!-- 弹幕 -->
-			<view class="barrage-wrap"></view>
+			<f-danmu ref="danmu"></f-danmu>
 		</view>
 
 		<!-- 底部 -->
@@ -83,7 +83,7 @@
 					<text class="iconfont text-white">&#xe7cd;</text>
 				</view>
 				
-				<view class="btn btn-icon">
+				<view class="btn btn-icon" @click="back">
 					<text class="iconfont text-white">&#xe607;</text>
 				</view>
 			</view>
@@ -93,7 +93,7 @@
 		<uni-popup ref="input" type="bottom">
 			<view class="bg-white flex align-center px-3" style="height: 120rpx;">
 				<input type="text" v-model="content" class="border rounded flex-1 px-3 font-md" style="height: 80rpx;" value="" placeholder="说点什么...">
-				<view class="bg-main flex align-center justify-center ml-3 py-2 px-2 rounded" @click="submit">
+				<view class="flex align-center justify-center ml-3 py-2 px-2 rounded" @click="submit" :class="content === '' ? 'bg-main-disabled' : 'bg-main'">
 					<text class="font text-white">发送</text>
 				</view>
 			</view>
@@ -103,16 +103,19 @@
 
 <script>
 	import fGift from "@/components/live/f-gift.vue"
+	import fDanmu from '@/components/live/f-danmu.vue'
 	export default {
 		components: {
-			fGift
+			fGift,
+			fDanmu
 		},
 		data() {
 			return {
 				// 状态栏高度
 				statusBarHeight: 0,
 				// 评论内容
-				content: ""
+				content: "",
+				id: 1
 			};
 		},
 		onLoad() {
@@ -129,14 +132,43 @@
 				gift_image: '/static/gift/3.png',
 				num: 1
 			})
+			
+			// 发弹幕演示
+			/* setInterval(() => {
+				this.submit();
+			}, 1000) */
 		},
 		methods: {
+			// 返回上一页
+			back() {
+				uni.navigateBack({
+					delta: 1
+				})
+			},
 			// 打开弹出层
 			openInput() {
 				this.$refs.input.open()
 			},
 			submit() {
+				if (!this.content.trim()) {
+					return uni.showToast({
+						icon:'error',
+						title: '请输入内容'
+					})
+				}
+				console.log('发送弹幕~')
+				this.$refs.danmu.send({
+						id: this.id,
+						name: '曹孟德',
+						content: this.content
+					});
+				this.id++;
+				this.content = '';
 				this.$refs.input.close()
+				uni.showToast({
+					icon:'success',
+					title: '发送成功.'
+				})
 			}
 		},
 	}
@@ -218,16 +250,6 @@
 						width: 325rpx;
 					}
 				}
-			}
-
-			.barrage-wrap {
-				position: fixed;
-				bottom: 120rpx;
-				left: 0;
-				right: 0;
-				width: 520rpx;
-				height: 300rpx;
-				background-color: lightpink;
 			}
 		}
 	}
