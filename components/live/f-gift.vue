@@ -36,28 +36,32 @@
 				gifts: []
 			}
 		},
-		created() {
-			setInterval(() => {
-				this.gifts.push({
-					username: '发送人',
-					avatar: '/static/gift/1.png',
-					gift_name: '蛋糕',
-					gift_image: '/static/gift/3.png',
-					num: 1
-				})
-				this.toBottom()
-			}, 2000)
-		},
 		methods: {
+			// 送礼物
+			send(gift) {
+				setInterval(() => {
+					this.gifts.push(gift)
+					this.toBottom()
+					this.autoHide()
+				}, 2000)
+			},
 			// 置于底部
 			toBottom() {
 				this.$nextTick(() => {
 					let index = this.gifts.length-1;
 					let ref = 'item' + index
 					if (this.$refs[ref]) {
-						dom.scrollToElement(this.$refs[ref][0])
+						dom.scrollToElement(this.$refs[ref][0], {animated: true})
 					}
 				})
+			},
+			// 自动消失
+			autoHide() {
+				if (this.gifts.length) {
+					let timer = setTimeout(() => {
+						this.gifts.splice(0, 1)
+					}, 5000)
+				}
 			}
 		}
 	}

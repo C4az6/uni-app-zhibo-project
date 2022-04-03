@@ -31,4 +31,5 @@
 	/* 不是NVUE端 */
 	@import url("/common/icon.css");
 	/* #endif */
+	/* @import url("/common/animate.min.css"); */
 </style>
