@@ -62,7 +62,31 @@
 		</view>
 
 		<!-- 底部 -->
-		<view class="bottom-wrap position-fixed bottom-0 right-0 left-0 bg-danger">
+		<view class="bottom-wrap position-fixed bottom-0 right-0 left-0 flex align-center justify-between">
+			<!-- 左侧 -->
+			<view class="px-2">
+				<view class="px-3 btn">
+					<text class="text-white font">说点什么...</text>
+				</view>
+			</view>
+			<!-- 右侧 -->
+			<view class="flex align-center">
+				<view class="btn btn-icon">
+					<text class="iconfont text-white" style="font-size: 80rpx;">&#xe633;</text>
+				</view>
+				
+				<view class="btn btn-icon bg-warning">
+					<text class="iconfont">&#xe67c;</text>
+				</view>
+				
+				<view class="btn btn-icon" style="">
+					<text class="iconfont text-white">&#xe7cd;</text>
+				</view>
+				
+				<view class="btn btn-icon">
+					<text class="iconfont text-white">&#xe607;</text>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -85,6 +109,7 @@
 			this.statusBarHeight = res.statusBarHeight
 		},
 		mounted() {
+			// 送礼物演示
 			this.$refs.gift.send({
 				username: '发送人',
 				avatar: '../../static/avatar/881406830_im.jpg',
@@ -97,6 +122,20 @@
 </script>
 
 <style lang="less">
+	.btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 80rpx; 
+		border-radius: 100rpx;
+		background-color: rgba(255,255,255,.2);
+	}
+	
+	.btn-icon {
+		width: 80rpx;
+		margin-right: 20rpx;
+	}
+	
 	.container {
 
 		/* 渐变颜色 */
