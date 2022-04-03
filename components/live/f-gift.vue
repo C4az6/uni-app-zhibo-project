@@ -1,7 +1,8 @@
 <template>
 
 	<list class="gift-content" show-scrollbar="false">
-		<cell :ref="`item${index}`" v-for="(item, index) in gifts" key="index" insert-animation="default" delete-animation="default">
+		<cell :ref="`item${index}`" v-for="(item, index) in gifts" key="index" insert-animation="default"
+			delete-animation="default">
 			<view class="flex align-center px-3 my-3">
 				<!-- 左侧 -->
 				<view class="user-info-content p bg-gradient rounded-circle flex align-center">
@@ -14,8 +15,8 @@
 						<text class="text-white font-sm">送 {{item.gift_name}}</text>
 					</view>
 					<view class="p">
-						<image class="rounded-circle" :src="item.gift_image || '../../static/gift/1.png'" style="width: 70rpx;height: 70rpx;"
-							mode=""></image>
+						<image class="rounded-circle" :src="item.gift_image || '../../static/gift/1.png'"
+							style="width: 70rpx;height: 70rpx;" mode=""></image>
 					</view>
 				</view>
 
@@ -39,19 +40,19 @@
 		methods: {
 			// 送礼物
 			send(gift) {
-				setInterval(() => {
-					this.gifts.push(gift)
-					this.toBottom()
-					this.autoHide()
-				}, 2000)
+				this.gifts.push(gift)
+				this.toBottom()
+				this.autoHide()
 			},
 			// 置于底部
 			toBottom() {
 				this.$nextTick(() => {
-					let index = this.gifts.length-1;
+					let index = this.gifts.length - 1;
 					let ref = 'item' + index
 					if (this.$refs[ref]) {
-						dom.scrollToElement(this.$refs[ref][0], {animated: true})
+						dom.scrollToElement(this.$refs[ref][0], {
+							animated: true
+						})
 					}
 				})
 			},

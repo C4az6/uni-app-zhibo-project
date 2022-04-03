@@ -2,7 +2,7 @@
 	<view class="container">
 		<!-- 全屏视频 -->
 		<video class="video" muted controls="false"
-			src="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8" autoplay></video>
+			src="https://v26-web.douyinvod.com/fee6fa633d5bdf9c139a9b3d352053b3/624a12a0/video/tos/cn/tos-cn-ve-15c001-alinc2/740ba369583a4e32a4b7c3cc94f9c53c/?a=6383&br=613&bt=613&cd=0%7C0%7C0%7C0&ch=5&cr=0&cs=0&cv=1&dr=0&ds=3&er=&ft=OyFYlOZZI0xI1lczWTh9Ixn_pbsdExgYtqY&l=2022040404320401013516423548AB3F49&lr=all&mime_type=video_mp4&net=0&pl=0&qs=0&rc=M2xvO2g6ZnJ0OzMzNGkzM0ApOjg2aTc8aWRlN2Q8aDk3NGdiZXFkcjRvMmxgLS1kLS9zc2MwYTU1MTE1Yi1fXi1iYy06Yw%3D%3D&vl=&vr=" autoplay></video>
 
 		<!-- 头部部分 -->
 		<view class="header-wrap position-fixed right-0 left-0" :style="`top: ${statusBarHeight}px`">
@@ -114,11 +114,11 @@
 					<swiper class="border-bottom border-top" style="height: 350rpx;" :indicator-dots="true" :duration="500">
 						<swiper-item>
 							<view class="flex flex-wrap">
-								<view class="justify-center align-center" style="width: 187.5rpx;height: 175rpx;" v-for="i in 8" :key="i">
-									<image src="../../static/gift/1.png" style="width: 100rpx;height: 100rpx;"></image>
+								<view class="justify-center align-center" style="width: 187.5rpx;height: 175rpx;" v-for="item in gifts" :key="item.id" :class="giftActiveIndex===item.id ? 'border border-main': ''" @click="giftActive(item.id)">
+									<image :src="item.image || '../../static/gift/1.png'" style="width: 100rpx;height: 100rpx;"></image>
 									<view class="flex align-center mt-1">
-										<text class="font text-warning mr-1">鸡蛋</text>
-										<text class="font text-secondary">1</text>
+										<text class="font text-warning mr-1">{{item.name}}</text>
+										<text class="font text-secondary">{{item.coin}}</text>
 									</view>
 								</view>
 							</view>
@@ -129,8 +129,8 @@
 					<view class="bg-warning py-2 px-3 rounded">
 						<text class="font">充值</text>
 					</view>
-					<view class="bg-main  py-2 px-3 mx-3 rounded">
-						<text class="text-white font">发送</text>
+					<view class="bg-main  py-2 px-3 mx-3 rounded" @click="sendGift">
+						<text class="text-white font">赠送</text>
 					</view>
 				</view>
 			</view>
@@ -141,6 +141,7 @@
 <script>
 	import fGift from "@/components/live/f-gift.vue"
 	import fDanmu from '@/components/live/f-danmu.vue'
+	import demoGifts from '../../demo/gifts.js'
 	export default {
 		components: {
 			fGift,
@@ -152,30 +153,53 @@
 				statusBarHeight: 0,
 				// 评论内容
 				content: "",
-				id: 1
+				id: 1,
+				gifts: [],
+				giftActiveIndex: 0
 			};
 		},
 		onLoad() {
 			// 获取系统信息，注意单位都是px!!!
 			let res = uni.getSystemInfoSync();
-			this.statusBarHeight = res.statusBarHeight
+			this.statusBarHeight = res.statusBarHeight;
+			// 演示
+			this.gifts = demoGifts;
+			console.log(demoGifts)
 		},
 		mounted() {
 			// 送礼物演示
-			this.$refs.gift.send({
-				username: '发送人',
-				avatar: '../../static/avatar/881406830_im.jpg',
-				gift_name: '蛋糕',
-				gift_image: '/static/gift/3.png',
-				num: 1
-			})
-
-			// 发弹幕演示
-			/* setInterval(() => {
-				this.submit();
-			}, 1000) */
+			
 		},
 		methods: {
+			// 发送礼物
+			sendGift() {
+				// 没有选中礼物
+				if (this.giftActiveIndex === 0) {
+					return uni.showToast({
+						title: '你还没有选择礼物哦~',
+					})
+				}
+				let gift = this.gifts.find(item => item.id === this.giftActiveIndex);
+				console.log("gift: ", gift)
+				this.$refs.gift.send({
+					username: '猪猪侠',
+					avatar: '../../static/avatar/881406830_im.jpg',
+					gift_name: gift.name,
+					gift_image: gift.image,
+					num: 1
+				})
+				this.giftActiveIndex = 0;
+				uni.showToast({
+					title: '赠送礼物成功~',
+					icon: 'success'
+				});
+				this.closeGiftPopup();
+			},
+			
+			// 选中礼物
+			giftActive(id) {
+				this.giftActiveIndex = id
+			},
 			// 关闭送礼物
 			closeGiftPopup() {
 				this.$refs.giftPopup.close()
