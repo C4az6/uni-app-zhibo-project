@@ -10,7 +10,7 @@
 				<!-- 左侧 -->
 				<view class="user-info-content rounded-circle flex align-center">
 					<view class="p">
-						<image class="rounded" src="../../static/tabbar/min.png" style="width: 70rpx;height: 70rpx;" mode=""></image>
+						<image class="rounded-circle" src="../../static/avatar/881406830_im.jpg" style="width: 70rpx;height: 70rpx;" mode=""></image>
 					</view>
 					<view class="flex-1 flex-column justify-center">
 						<text class="text-white font">昵称</text>
@@ -25,7 +25,7 @@
 				<view class="user-info-content rounded-circle flex align-center">
 					<scroll-view scroll-x class="flex-1 flex"  >
 					<view class="p" v-for="i in 20" :key="i">
-							<image class="rounded" src="../../static/tabbar/min.png" style="width: 70rpx;height: 70rpx;" mode=""></image>
+							<image class="rounded-circle" src="../../static/avatar/881406830_im.jpg" style="width: 70rpx;height: 70rpx;" mode=""></image>
 					</view>
 					</scroll-view>
 					
@@ -49,26 +49,7 @@
 			
 			<!-- 收到礼物 -->
 			<view class="gift-wrap">
-				<scroll-view scroll-y class="gift-content">
-					<view class="flex align-center px-3 my-2" v-for="i in 20" key="i">
-						<!-- 左侧 -->
-						<view class="user-info-content p bg-gradient rounded-circle flex align-center">
-							<view class="p">
-								<image class="rounded" src="../../static/tabbar/min.png" style="width: 70rpx;height: 70rpx;" mode=""></image>
-							</view>
-							<view class="flex-1 flex-column justify-center">
-								<text class="text-white font">张波</text>
-								<text class="text-white font-sm">送蛋糕</text>
-							</view>
-							<view class="p">
-								<image class="rounded" src="../../static/gift/1.png" style="width: 70rpx;height: 70rpx;" mode=""></image>
-							</view>
-						</view>
-						
-						<!-- 右侧送出礼物数量 -->
-						<text class="text-warning font-lg ml-1">X 10</text>
-					</view>
-				</scroll-view>
+				<f-gift></f-gift>
 			</view>
 			
 			<!-- 弹幕 -->
@@ -82,7 +63,11 @@
 </template>
 
 <script>
+	import fGift from "@/components/live/f-gift.vue"
 	export default {
+		components: {
+			fGift
+		},
 		data() {
 			return {
 				// 状态栏高度
