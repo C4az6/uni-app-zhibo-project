@@ -1,8 +1,8 @@
 <template>
 	<view class="container">
 		<!-- 全屏视频 -->
-		<video class="video" muted controls="false" src="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
-			autoplay></video>
+		<video class="video" muted controls="false"
+			src="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8" autoplay></video>
 
 		<!-- 头部部分 -->
 		<view class="header-wrap position-fixed right-0 left-0" :style="`top: ${statusBarHeight}px`">
@@ -64,7 +64,7 @@
 		<!-- 底部 -->
 		<view class="bottom-wrap position-fixed bottom-0 right-0 left-0 flex align-center justify-between">
 			<!-- 左侧 -->
-			<view class="px-2" >
+			<view class="px-2">
 				<view class="px-3 btn" @click="openInput">
 					<text class="text-white font">说点什么...</text>
 				</view>
@@ -74,27 +74,64 @@
 				<view class="btn btn-icon">
 					<text class="iconfont text-white" style="font-size: 80rpx;">&#xe633;</text>
 				</view>
-				
-				<view class="btn btn-icon bg-warning">
+
+				<view class="btn btn-icon bg-warning" @click="giveGift">
 					<text class="iconfont">&#xe67c;</text>
 				</view>
-				
+
 				<view class="btn btn-icon" style="">
 					<text class="iconfont text-white">&#xe7cd;</text>
 				</view>
-				
+
 				<view class="btn btn-icon" @click="back">
 					<text class="iconfont text-white">&#xe607;</text>
 				</view>
 			</view>
 		</view>
-		
+
 		<!-- 输入框弹出层 -->
 		<uni-popup ref="input" type="bottom">
 			<view class="bg-white flex align-center px-3" style="height: 120rpx;">
-				<input type="text" v-model="content" class="border rounded flex-1 px-3 font-md" style="height: 80rpx;" value="" placeholder="说点什么...">
-				<view class="flex align-center justify-center ml-3 py-2 px-2 rounded" @click="submit" :class="content === '' ? 'bg-main-disabled' : 'bg-main'">
+				<input type="text" v-model="content" class="border rounded flex-1 px-3 font-md" style="height: 80rpx;"
+					value="" placeholder="说点什么...">
+				<view class="flex align-center justify-center ml-3 py-2 px-2 rounded" @click="submit"
+					:class="content === '' ? 'bg-main-disabled' : 'bg-main'">
 					<text class="font text-white">发送</text>
+				</view>
+			</view>
+		</uni-popup>
+
+		<!-- 送礼物弹出层 -->
+		<uni-popup type="bottom" ref="giftPopup">
+			<view class="bg-white" style="width: 750rpx;height: 550rpx;">
+				<view class="flex justify-between px-2 align-center" style="height: 100rpx;">
+					<text class="font-md text-main">礼物</text>
+					<view class="p-3" @click="closeGiftPopup">
+						<text class="iconfont">&#xe607;</text>
+					</view>
+				</view>
+				<view class="">
+					<swiper class="border-bottom border-top" style="height: 350rpx;" :indicator-dots="true" :duration="500">
+						<swiper-item>
+							<view class="flex flex-wrap">
+								<view class="justify-center align-center" style="width: 187.5rpx;height: 175rpx;" v-for="i in 8" :key="i">
+									<image src="../../static/gift/1.png" style="width: 100rpx;height: 100rpx;"></image>
+									<view class="flex align-center mt-1">
+										<text class="font text-warning mr-1">鸡蛋</text>
+										<text class="font text-secondary">1</text>
+									</view>
+								</view>
+							</view>
+						</swiper-item>
+					</swiper>
+				</view>
+				<view class="flex align-center justify-end" style="height: 100rpx;">
+					<view class="bg-warning py-2 px-3 rounded">
+						<text class="font">充值</text>
+					</view>
+					<view class="bg-main  py-2 px-3 mx-3 rounded">
+						<text class="text-white font">发送</text>
+					</view>
 				</view>
 			</view>
 		</uni-popup>
@@ -132,13 +169,21 @@
 				gift_image: '/static/gift/3.png',
 				num: 1
 			})
-			
+
 			// 发弹幕演示
 			/* setInterval(() => {
 				this.submit();
 			}, 1000) */
 		},
 		methods: {
+			// 关闭送礼物
+			closeGiftPopup() {
+				this.$refs.giftPopup.close()
+			},
+			// 送礼物点击事件
+			giveGift() {
+				this.$refs.giftPopup.open();
+			},
 			// 返回上一页
 			back() {
 				uni.navigateBack({
@@ -152,21 +197,21 @@
 			submit() {
 				if (!this.content.trim()) {
 					return uni.showToast({
-						icon:'error',
+						icon: 'error',
 						title: '请输入内容'
 					})
 				}
 				console.log('发送弹幕~')
 				this.$refs.danmu.send({
-						id: this.id,
-						name: '曹孟德',
-						content: this.content
-					});
+					id: this.id,
+					name: '曹孟德',
+					content: this.content
+				});
 				this.id++;
 				this.content = '';
 				this.$refs.input.close()
 				uni.showToast({
-					icon:'success',
+					icon: 'success',
 					title: '发送成功.'
 				})
 			}
@@ -179,16 +224,16 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		height: 80rpx; 
+		height: 80rpx;
 		border-radius: 100rpx;
-		background-color: rgba(255,255,255,.2);
+		background-color: rgba(255, 255, 255, .2);
 	}
-	
+
 	.btn-icon {
 		width: 80rpx;
 		margin-right: 20rpx;
 	}
-	
+
 	.container {
 
 		/* 渐变颜色 */
