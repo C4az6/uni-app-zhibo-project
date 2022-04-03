@@ -71,7 +71,7 @@
 			</view>
 			<!-- 右侧 -->
 			<view class="flex align-center">
-				<view class="btn btn-icon">
+				<view class="btn btn-icon" @click="openCoin">
 					<text class="iconfont text-white" style="font-size: 80rpx;">&#xe633;</text>
 				</view>
 
@@ -126,7 +126,7 @@
 					</swiper>
 				</view>
 				<view class="flex align-center justify-end" style="height: 100rpx;">
-					<view class="bg-warning py-2 px-3 rounded">
+					<view class="bg-warning py-2 px-3 rounded" @click="openCoin">
 						<text class="font">充值</text>
 					</view>
 					<view class="bg-main  py-2 px-3 mx-3 rounded" @click="sendGift">
@@ -171,12 +171,19 @@
 			
 		},
 		methods: {
+			// 跳转充值金币页面
+			openCoin() {
+				uni.navigateTo({
+					url: '/pages/coin/coin'
+				})
+			},
 			// 发送礼物
 			sendGift() {
 				// 没有选中礼物
 				if (this.giftActiveIndex === 0) {
 					return uni.showToast({
 						title: '你还没有选择礼物哦~',
+						icon: 'none'
 					})
 				}
 				let gift = this.gifts.find(item => item.id === this.giftActiveIndex);

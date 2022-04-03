@@ -26,6 +26,14 @@
 					"titleNView": false
 				}
 			}
+		}, {
+			"path": "pages/coin/coin",
+			"style": {
+				"navigationBarTitleText": "我的余额",
+						"navigationBarBackgroundColor": "#FFFFFF",
+						"navigationBarTextStyle": "black"
+			}
+
 		}
 	],
 	"globalStyle": {
