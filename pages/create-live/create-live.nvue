@@ -38,17 +38,17 @@
 					<text class="text-white font">翻转</text>
 				</view>
 
-				<view style="height: 120rpx;" class="flex flex-column align-center justify-center" @click="openPopup">
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center" @click="openPopup('mode')">
 					<text class="iconfont text-white mb-1">&#xe60c;</text>
 					<text class="text-white font">画质</text>
 				</view>
 
-				<view style="height: 120rpx;" class="flex flex-column align-center justify-center">
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center" @click="openPopup('beauty')">
 					<text class="iconfont text-white mb-1">&#xe632;</text>
 					<text class="text-white font">美颜</text>
 				</view>
 
-				<view style="height: 120rpx;" class="flex flex-column align-center justify-center">
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center" @click="openPopup('whiteness')">
 					<text class="iconfont text-white mb-1">&#xe631;</text>
 					<text class="text-white font">美白</text>
 				</view>
@@ -66,15 +66,24 @@
 		<uni-popup ref="popup" type="bottom">
 			<view class="bg-white">
 				<view class="flex align-center justify-center border-bottom" style="height: 90rpx;">
-					<text class="font-md">提示</text>
+					<text class="font-md">{{getPopupTitle}}</text>
 				</view>
 				<!-- 画质选择 -->
-				<view>
+				<view v-if="popupType==='mode'">
 					<view class="flex align-center justify-center py-2 hover-class" hover-class="bg-light"
 						v-for="(item, index) in modeList" :key="item.desc" :class="livePusherOptions.mode === item.type ? 'bg-main' : ''" @click="switchVideoMass(item)">
 						<text class="font-md" :class="livePusherOptions.mode === item.type ? 'text-white' : ''">{{item.desc}}</text>
 					</view>
-
+				</view>
+				
+				<!-- 美颜 -->
+				<view v-else-if="popupType==='beauty'">
+					<slider :min="0" :max="9" :step="1" :value="livePusherOptions.beauty" :block-size="18" showValue @change="handleSliderChange"/>
+				</view>
+				
+				<!-- 美白 -->
+				<view v-else-if="popupType==='whiteness'">
+					<slider :min="0" :max="9" :step="1" :value="livePusherOptions.whiteness" :block-size="18" showValue @change="handleSliderChange"/>
 				</view>
 				<view class="f-divider"></view>
 				<view class="flex align-center justify-center hover-class " style="height: 90rpx;" hover-class="" @click="closePopup">
@@ -114,10 +123,15 @@
 						type: 'FHD',
 						desc: '超清'
 					}
-				]
+				],
+				popupType: 'mode'
 			}
 		},
 		methods: {
+			// 监听滑块变化
+			handleSliderChange(e) {
+				this.livePusherOptions[this.popupType] = e.detail.value
+			},
 			// 切换画质
 			switchVideoMass(item) {
 				this.livePusherOptions.mode = item.type
@@ -132,8 +146,9 @@
 				this.$refs.popup.close();
 			},
 			// 打开切换画质弹出层
-			openPopup() {
+			openPopup(type) {
 				console.log(666)
+				this.popupType = type
 				this.$refs.popup.open();
 			},
 			// 切换镜头
@@ -160,6 +175,25 @@
 			error() {}
 		},
 		computed: {
+			// 弹出层标题
+			getPopupTitle() {
+				/* let title;
+				if (this.popupType === 'mode') {
+					title = '画质'
+				}else if (this.popupType === 'beauty') {
+					title = '美颜'
+				}else if (this.popupType === 'whiteness') {
+					title = '美白'
+				}
+				return title; */
+				
+				let options = {
+					mode: '画质',
+					beauty: '美颜',
+					whiteness: '美白'
+				}
+				return options[this.popupType]
+			}
 		},
 		onLoad() {
 			// 获取设备信息
