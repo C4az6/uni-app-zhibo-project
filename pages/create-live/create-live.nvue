@@ -32,12 +32,13 @@
 
 			<!-- 直播特效功能列表 -->
 			<view class="position-absolute right-0 flex flex-column" style="width: 100rpx;">
-				<view style="height: 120rpx;" class="flex flex-column align-center justify-center">
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center"
+					@click="switchCamera">
 					<text class="iconfont text-white mb-1">&#xe605;</text>
 					<text class="text-white font">翻转</text>
 				</view>
 
-				<view style="height: 120rpx;" class="flex flex-column align-center justify-center">
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center" @click="openPopup">
 					<text class="iconfont text-white mb-1">&#xe60c;</text>
 					<text class="text-white font">画质</text>
 				</view>
@@ -61,6 +62,26 @@
 		</view>
 
 
+		<!-- 切换画质的弹出层 -->
+		<uni-popup ref="popup" type="bottom">
+			<view class="bg-white">
+				<view class="flex align-center justify-center border-bottom" style="height: 90rpx;">
+					<text class="font-md">提示</text>
+				</view>
+				<!-- 画质选择 -->
+				<view>
+					<view class="flex align-center justify-center py-2 hover-class" hover-class="bg-light"
+						v-for="(item, index) in modeList" :key="item.desc" :class="livePusherOptions.mode === item.type ? 'bg-main' : ''" @click="switchVideoMass(item)">
+						<text class="font-md" :class="livePusherOptions.mode === item.type ? 'text-white' : ''">{{item.desc}}</text>
+					</view>
+
+				</view>
+				<view class="f-divider"></view>
+				<view class="flex align-center justify-center hover-class " style="height: 90rpx;" hover-class="" @click="closePopup">
+					<text class="font-md">取消</text>
+				</view>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
@@ -80,26 +101,65 @@
 				windowHeight: 0,
 				// 直播组件上下文
 				context: null,
-				statusBarHeight: 0
+				statusBarHeight: 0,
+				modeList: [{
+						type: 'SD',
+						desc: '标清'
+					},
+					{
+						type: 'HD',
+						desc: '高清'
+					},
+					{
+						type: 'FHD',
+						desc: '超清'
+					}
+				]
 			}
 		},
 		methods: {
+			// 切换画质
+			switchVideoMass(item) {
+				this.livePusherOptions.mode = item.type
+				uni.showToast({
+					title:'画质切换为: ' + item.desc,
+					icon: 'none'
+				})
+				this.$refs.popup.close()
+			},
+			// 关闭弹出层
+			closePopup() {
+				this.$refs.popup.close();
+			},
+			// 打开切换画质弹出层
+			openPopup() {
+				console.log(666)
+				this.$refs.popup.open();
+			},
+			// 切换镜头
+			switchCamera() {
+				this.context.switchCamera({
+					success: e => {}
+				})
+			},
 			// 开启摄像头预览
 			startPreview() {
 				this.context.startPreview({
 					success: (e) => {
-						console.log(e)
+						this.livePusherOptions.position === 'back' ? 'front' : 'back';
 					}
 				})
 			},
 			// 直播状态变化
 			statechange(e) {
-				console.log(e);
+
 			},
 			// 直播网络变化
 			netstatus() {},
 			// 监听错误
 			error() {}
+		},
+		computed: {
 		},
 		onLoad() {
 			// 获取设备信息
@@ -109,11 +169,13 @@
 		},
 		onReady() {
 			this.context = uni.createLivePusherContext('livePusher', this);
-			// this.startPreview()
+			// this.startPreview() 
 		}
 	}
 </script>
 
 <style lang="less">
-
+	.hover-class:active {
+		background-color: #f8f9fa;
+	}
 </style>
