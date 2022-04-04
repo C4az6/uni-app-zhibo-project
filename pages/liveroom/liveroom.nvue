@@ -1,15 +1,15 @@
 <template>
-	<view class="container">
+	<view style="width: 750rpx;">
 		<!-- 全屏视频 -->
-		<video class="video" controls="false"
-			src="https://v26-web.douyinvod.com/312206440089cf9147fdc0ca3704f68f/624a845c/video/tos/cn/tos-cn-ve-15c001-alinc2/14ef7ed416be4d9bb3d85fbd92211eb1/"
-			autoplay></video>
+		<live-pusher id='livePusher' ref="livePusher" class="livePusher" :url="livePusherOptions.url"
+			:mode="livePusherOptions.mode" :muted="true" :enable-camera="livePusherOptions.enableCamera"
+			:auto-focus="true" :beauty="livePusherOptions.beauty" :whiteness="livePusherOptions.whiteness"
+			:aspect="livePusherOptions.aspect" @statechange="statechange" @netstatus="netstatus" @error="error"
+			:style="`height:${windowHeight}px;`" style="width: 750rpx;"></live-pusher>
 
 		<!-- 头部部分 -->
 		<view class="header-wrap position-fixed right-0 left-0" :style="`top: ${statusBarHeight}px`">
-			<!-- 个人信息|观看详细信息 -->
-			<view class="userinfo-wrap px-2 flex justify-between">
-				<!-- 左侧 -->
+			<!-- <view class="userinfo-wrap px-2 flex justify-between">
 				<view class="user-info-content rounded-circle flex align-center">
 					<view class="p">
 						<image class="rounded-circle" src="../../static/avatar/881406830_im.jpg"
@@ -25,7 +25,6 @@
 					</view>
 				</view>
 
-				<!-- 右侧 -->
 				<view class="user-info-content rounded-circle flex align-center">
 					<scroll-view scroll-x class="flex-1 flex">
 						<view class="p" v-for="i in 20" :key="i">
@@ -39,10 +38,10 @@
 						<text class="text-white font-sm">1000</text>
 					</view>
 				</view>
-			</view>
+			</view> -->
 
 			<!-- 金币 -->
-			<view class="gold-wrap flex align-center">
+			<!-- <view class="gold-wrap flex align-center">
 				<view class="user-info-content rounded-circle bg-danger flex align-center">
 					<view class="p-2">
 						<text class="text-warning">金币</text>
@@ -51,24 +50,68 @@
 						<text class="text-white">100</text>
 					</view>
 				</view>
-			</view>
+			</view> -->
 
 			<!-- 收到礼物 -->
-			<view class="gift-wrap">
+			<!-- <view class="gift-wrap">
 				<f-gift ref="gift"></f-gift>
-			</view>
+			</view> -->
 
 			<!-- 弹幕 -->
-			<f-danmu ref="danmu"></f-danmu>
+			<!-- <f-danmu ref="danmu"></f-danmu> -->
 		</view>
 
 		<!-- 底部 -->
 		<view class="bottom-wrap position-fixed bottom-0 right-0 left-0 flex align-center justify-between">
-			<view class="flex-1 flex-column align-center justify-center" v-for="(item) in btns" :key="item.name">
-					<text class="iconfont text-white mb-1">{{item.icon}}</text>
-					<text class="text-white font">{{item.name}}</text>
+			<view class="flex-1 flex-column align-center justify-center" v-for="(item) in btns" :key="item.name" @click="handleBottomEvent(item)">
+				<text class="iconfont text-white mb-1">{{item.icon}}</text>
+				<text class="text-white font">{{item.name}}</text>
 			</view>
 		</view>
+		
+		<uni-popup ref="popup" type="bottom">
+			<view class="bg-white">
+				<view class="flex align-center justify-center border-bottom" style="height: 90rpx;">
+					<text class="font-md">{{getPopupTitle}}</text>
+				</view>
+				<!-- 画质选择 -->
+				<view v-if="popupType==='mode'">
+					<view class="flex align-center justify-center py-2 hover-class" hover-class="bg-light"
+						v-for="(item, index) in modeList" :key="item.desc" :class="livePusherOptions.mode === item.type ? 'bg-main' : ''" @click="switchVideoMass(item)">
+						<text class="font-md" :class="livePusherOptions.mode === item.type ? 'text-white' : ''">{{item.desc}}</text>
+					</view>
+				</view>
+				
+				<!-- 美颜 -->
+				<view v-else-if="popupType==='beauty'">
+					<slider :min="0" :max="9" :step="1" :value="livePusherOptions.beauty" :block-size="18" showValue @change="handleSliderChange"/>
+				</view>
+				
+				<!-- 美白 -->
+				<view v-else-if="popupType==='whiteness'">
+					<slider :min="0" :max="9" :step="1" :value="livePusherOptions.whiteness" :block-size="18" showValue @change="handleSliderChange"/>
+				</view>
+				
+				<!-- 更多 -->
+				<view v-else-if="popupType === 'more'" class="flex flex-wrap">
+					<view style="width: 150rpx;height: 150rpx;" class="flex flex-column align-center justify-center">
+						<text class="iconfont mb-1">&#xe611;</text>
+						<text class="font">暂停</text>
+					</view>
+					
+					<view style="width: 150rpx;height: 150rpx;" class="flex flex-column align-center justify-center">
+						<text class="iconfont mb-1">&#xe64d;</text>
+						<text class="font">播放</text>
+					</view>
+					
+					
+				</view>
+				<view class="f-divider"></view>
+				<view class="flex align-center justify-center hover-class " style="height: 90rpx;" hover-class="" @click="back">
+					<text class="font-md">退出</text>
+				</view>
+			</view>
+		</uni-popup>
 
 	</view>
 </template>
@@ -91,127 +134,156 @@
 				id: 1,
 				gifts: [],
 				giftActiveIndex: 0,
-				mode: "",
-				position: "",
-				beauty: "",
-				whiteness: "",
-				btns: [
-					{
+				livePusherOptions: {
+					url: '',
+					mode: 'SD',
+					enableCamera: true,
+					position: "back",
+					beauty: 0,
+					whiteness: 2,
+					aspect: "9:16"
+				},
+				// 屏幕高度
+				windowHeight: 0,
+				btns: [{
 						name: '翻转',
-						icon: '\ue605'
+						icon: '\ue605',
+						event: "switchCamera",
+						params: ""
 					},
 					{
 						name: '画质',
-						icon: '\ue60c'
+						icon: '\ue60c',
+						event: "openPopup",
+						params: "mode"
 					},
 					{
 						name: '美颜',
-						icon: '\ue632'
+						icon: '\ue632',
+						event: "openPopup",
+						params: "beauty"
 					},
 					{
 						name: '美白',
-						icon: '\ue631'
+						icon: '\ue631',
+						event: "openPopup",
+						params: "whiteness"
 					},
 					{
 						name: '更多',
-						icon: '\ue84b'
+						icon: '\ue84b',
+						event: "openPopup",
+						params: "more"
 					}
-				]
+				],
+				context: null,
+				modeList: [{
+						type: 'SD',
+						desc: '标清'
+					},
+					{
+						type: 'HD',
+						desc: '高清'
+					},
+					{
+						type: 'FHD',
+						desc: '超清'
+					}
+				],
+				popupType: 'mode'
 			};
 		},
 		onLoad(e) {
 			// 获取系统信息，注意单位都是px!!!
 			let res = uni.getSystemInfoSync();
 			this.statusBarHeight = res.statusBarHeight;
+			this.windowHeight = res.windowHeight;
 			// 演示
 			this.gifts = demoGifts;
 			let options = JSON.parse(e.options)
-			for(let i in options) {
-				this[i] = options[i];
+			for (let i in options) {
+				this.livePusherOptions[i] = options[i];
 			}
 
 		},
-		mounted() {
-			// 送礼物演示
-
+		onReady() {
+			this.context = uni.createLivePusherContext('livePusher', this);
+			// this.startPreview()
 		},
 		methods: {
-			// 跳转充值金币页面
-			openCoin() {
-				uni.navigateTo({
-					url: '/pages/coin/coin'
-				})
+			// 监听底部功能菜单点击事件
+			handleBottomEvent(item) {
+				this[item.event](item.params)
 			},
-			// 发送礼物
-			sendGift() {
-				// 没有选中礼物
-				if (this.giftActiveIndex === 0) {
-					return uni.showToast({
-						title: '你还没有选择礼物哦~',
-						icon: 'none'
-					})
-				}
-				let gift = this.gifts.find(item => item.id === this.giftActiveIndex);
-				console.log("gift: ", gift)
-				this.$refs.gift.send({
-					username: '猪猪侠',
-					avatar: '../../static/avatar/881406830_im.jpg',
-					gift_name: gift.name,
-					gift_image: gift.image,
-					num: 1
-				})
-				this.giftActiveIndex = 0;
+			// 监听滑块变化
+			handleSliderChange(e) {
+				this.livePusherOptions[this.popupType] = e.detail.value
+			},
+			// 切换画质
+			switchVideoMass(item) {
+				this.livePusherOptions.mode = item.type
 				uni.showToast({
-					title: '赠送礼物成功~',
-					icon: 'success'
-				});
-				this.closeGiftPopup();
+					title:'画质切换为: ' + item.desc,
+					icon: 'none'
+				})
+				this.$refs.popup.close()
 			},
-
-			// 选中礼物
-			giftActive(id) {
-				this.giftActiveIndex = id
+			// 关闭弹出层
+			closePopup() {
+				this.$refs.popup.close();
 			},
-			// 关闭送礼物
-			closeGiftPopup() {
-				this.$refs.giftPopup.close()
+			// 打开切换画质弹出层
+			openPopup(type) {
+				this.popupType = type
+				this.$refs.popup.open();
 			},
-			// 送礼物点击事件
-			giveGift() {
-				this.$refs.giftPopup.open();
+			// 切换镜头
+			switchCamera() {
+				this.context.switchCamera({
+					success: e => {}
+				})
 			},
-			// 返回上一页
+			// 开启摄像头预览
+			startPreview() {
+				this.context.startPreview({
+					success: (e) => {
+						this.livePusherOptions.position === 'back' ? 'front' : 'back';
+					}
+				})
+			},
+			// 直播状态变化
+			statechange(e) {
+			
+			},
+			// 直播网络变化
+			netstatus() {},
+			// 监听错误
+			error() {},
 			back() {
-				uni.navigateBack({
-					delta: 1
-				})
-			},
-			// 打开弹出层
-			openInput() {
-				this.$refs.input.open()
-			},
-			submit() {
-				if (!this.content.trim()) {
-					return uni.showToast({
-						icon: 'error',
-						title: '请输入内容'
-					})
-				}
-				console.log('发送弹幕~')
-				this.$refs.danmu.send({
-					id: this.id,
-					name: '曹孟德',
-					content: this.content
-				});
-				this.id++;
-				this.content = '';
-				this.$refs.input.close()
-				uni.showToast({
-					icon: 'success',
-					title: '发送成功.'
+				uni.showModal({
+					content: '是否结束当前直播?',
+					success(res) {
+						if (res.confirm) {
+							uni.navigateBack({
+								delta: 1
+							})
+						}
+					}
 				})
 			}
 		},
+		computed: {
+			// 弹出层标题
+			getPopupTitle() {
+				let options = {
+					mode: '画质',
+					beauty: '美颜',
+					whiteness: '美白',
+					more: '更多'
+				}
+				return options[this.popupType]
+			}
+		}
 	}
 </script>
 
@@ -230,66 +302,43 @@
 		margin-right: 20rpx;
 	}
 
-	.container {
+	.bottom-wrap {
+		height: 120rpx;
+	}
 
-		/* 渐变颜色 */
-		.bg-gradient {
-			background-image: linear-gradient(to right, #BCABB1, #65AAF0);
-		}
+	.header-wrap {
+		.userinfo-wrap {
+			height: 80rpx;
 
-		/* 
-		由于nvue是基于weex的,weex的布局是Flex,如果需要让.container占满屏幕需要给flex: 1
-	 */
-		flex: 1;
-		background-color: lightgreen;
-
-		.video {
-			flex: 1;
-			position: absolute;
-			top: 0;
-			right: 0;
-			left: 0;
-			bottom: 0;
-		}
-
-		.bottom-wrap {
-			height: 120rpx;
-		}
-
-		.header-wrap {
-			.userinfo-wrap {
-				height: 80rpx;
-
-				.user-info-content {
-					display: flex;
-					width: 325rpx;
-					background-color: rgba(0, 0, 0, .4);
-				}
+			.user-info-content {
+				display: flex;
+				width: 325rpx;
+				background-color: rgba(0, 0, 0, .4);
 			}
+		}
 
-			.gold-wrap {
-				height: 80rpx;
-				padding: 0 20rpx;
-				margin: 20rpx 0;
+		.gold-wrap {
+			height: 80rpx;
+			padding: 0 20rpx;
+			margin: 20rpx 0;
 
-				.user-info-content {
-					display: flex;
-					width: 325rpx;
-					background-color: rgba(0, 0, 0, .4);
-				}
+			.user-info-content {
+				display: flex;
+				width: 325rpx;
+				background-color: rgba(0, 0, 0, .4);
 			}
+		}
 
-			.gift-wrap {
+		.gift-wrap {
+			height: 500rpx;
+
+			.gift-content {
+				width: 520rpx;
 				height: 500rpx;
 
-				.gift-content {
-					width: 520rpx;
-					height: 500rpx;
-
-					.user-info-content {
-						display: flex;
-						width: 325rpx;
-					}
+				.user-info-content {
+					display: flex;
+					width: 325rpx;
 				}
 			}
 		}
