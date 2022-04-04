@@ -1,8 +1,8 @@
 <template>
 	<view class="container">
 		<!-- 全屏视频 -->
-		<video class="video" muted controls="false"
-			src="https://v26-web.douyinvod.com/fee6fa633d5bdf9c139a9b3d352053b3/624a12a0/video/tos/cn/tos-cn-ve-15c001-alinc2/740ba369583a4e32a4b7c3cc94f9c53c/?a=6383&br=613&bt=613&cd=0%7C0%7C0%7C0&ch=5&cr=0&cs=0&cv=1&dr=0&ds=3&er=&ft=OyFYlOZZI0xI1lczWTh9Ixn_pbsdExgYtqY&l=2022040404320401013516423548AB3F49&lr=all&mime_type=video_mp4&net=0&pl=0&qs=0&rc=M2xvO2g6ZnJ0OzMzNGkzM0ApOjg2aTc8aWRlN2Q8aDk3NGdiZXFkcjRvMmxgLS1kLS9zc2MwYTU1MTE1Yi1fXi1iYy06Yw%3D%3D&vl=&vr=" autoplay></video>
+		<video class="video" controls="false"
+			src="https://v26-web.douyinvod.com/312206440089cf9147fdc0ca3704f68f/624a845c/video/tos/cn/tos-cn-ve-15c001-alinc2/14ef7ed416be4d9bb3d85fbd92211eb1/" autoplay></video>
 
 		<!-- 头部部分 -->
 		<view class="header-wrap position-fixed right-0 left-0" :style="`top: ${statusBarHeight}px`">
@@ -164,7 +164,6 @@
 			this.statusBarHeight = res.statusBarHeight;
 			// 演示
 			this.gifts = demoGifts;
-			console.log(demoGifts)
 		},
 		mounted() {
 			// 送礼物演示

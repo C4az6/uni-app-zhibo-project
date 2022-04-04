@@ -1,0 +1,60 @@
+<template>
+	<view>
+		<live-pusher id='livePusher' ref="livePusher" class="livePusher" :url="livePusherOptions.url"
+			:mode="livePusherOptions.mode" :muted="true" :enable-camera="livePusherOptions.enableCamera" :auto-focus="true"
+			:beauty="livePusherOptions.beauty" :whiteness="livePusherOptions.whiteness" :aspect="livePusherOptions.aspect" @statechange="statechange" @netstatus="netstatus"
+			@error="error" :style="`height:${windowHeight}px;`" style="width: 750rpx;"></live-pusher>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				livePusherOptions: {
+					url: '',
+					mode: 'SD',
+					enableCamera: true,
+					position: "back",
+					beauty: 0,
+					whiteness: 2,
+					aspect: "9:16"
+				},
+				windowHeight: 0,
+				// 直播组件上下文
+				context: null
+			}
+		},
+		methods: {
+			// 开启摄像头预览
+			startPreview() {
+				this.context.startPreview({
+					success: (e) => {
+						console.log(e)
+					}
+				})
+			},
+			// 直播状态变化
+			statechange(e) {
+				console.log(e);
+			},
+			// 直播网络变化
+			netstatus() {},
+			// 监听错误
+			error() {}
+		},
+		onLoad() {
+			// 获取设备信息
+			let res = uni.getSystemInfoSync();
+			this.windowHeight = res.windowHeight;
+		},
+		onReady() {
+			this.context = uni.createLivePusherContext('livePusher', this);
+			this.startPreview()
+		}
+	}
+</script>
+
+<style lang="less">
+
+</style>
