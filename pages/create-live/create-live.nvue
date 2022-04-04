@@ -1,9 +1,37 @@
 <template>
 	<view>
 		<live-pusher id='livePusher' ref="livePusher" class="livePusher" :url="livePusherOptions.url"
-			:mode="livePusherOptions.mode" :muted="true" :enable-camera="livePusherOptions.enableCamera" :auto-focus="true"
-			:beauty="livePusherOptions.beauty" :whiteness="livePusherOptions.whiteness" :aspect="livePusherOptions.aspect" @statechange="statechange" @netstatus="netstatus"
-			@error="error" :style="`height:${windowHeight}px;`" style="width: 750rpx;"></live-pusher>
+			:mode="livePusherOptions.mode" :muted="true" :enable-camera="livePusherOptions.enableCamera"
+			:auto-focus="true" :beauty="livePusherOptions.beauty" :whiteness="livePusherOptions.whiteness"
+			:aspect="livePusherOptions.aspect" @statechange="statechange" @netstatus="netstatus" @error="error"
+			:style="`height:${windowHeight}px;`" style="width: 750rpx;"></live-pusher>
+
+		<!-- 覆盖在页面的组件 -->
+		<view class="position-fixed bg-danger right-0 left-0" :style="`top: ${statusBarHeight}px;height: 500rpx;`">
+			<!-- 关闭按钮 -->
+			<view class="flex justify-center align-center" style="width: 90rpx;height: 90rpx;">
+				<text class="iconfont text-white">&#xe607;</text>
+			</view>
+
+
+			<!-- 直播间设置 -->
+			<view class="position-absolute rounded bg-main" style="left: 90rpx;right: 100rpx;height: 160rpx;"></view>
+
+			<!-- 直播特效功能列表 -->
+			<view class="position-absolute right-0 flex flex-column" style="width: 100rpx;">
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center bg-info"></view>
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center bg-info"></view>
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center bg-info"></view>
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center bg-info"></view>
+			</view>
+		</view>
+		<!-- 开启直播按钮 -->
+		<view class="position-fixed bg-main flex justify-center align-center rounded-circle"
+			style="left: 100rpx;right: 100rpx;bottom: 100rpx;height: 120rpx;">
+			<text class="text-white font-md">开始视频直播</text>
+		</view>
+	
+
 	</view>
 </template>
 
@@ -22,7 +50,8 @@
 				},
 				windowHeight: 0,
 				// 直播组件上下文
-				context: null
+				context: null,
+				statusBarHeight: 0
 			}
 		},
 		methods: {
@@ -47,10 +76,11 @@
 			// 获取设备信息
 			let res = uni.getSystemInfoSync();
 			this.windowHeight = res.windowHeight;
+			this.statusBarHeight = res.statusBarHeight;
 		},
 		onReady() {
 			this.context = uni.createLivePusherContext('livePusher', this);
-			this.startPreview()
+			// this.startPreview()
 		}
 	}
 </script>
