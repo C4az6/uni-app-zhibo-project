@@ -7,7 +7,7 @@
 			:style="`height:${windowHeight}px;`" style="width: 750rpx;"></live-pusher>
 
 		<!-- 覆盖在页面的组件 -->
-		<view class="position-fixed bg-danger right-0 left-0" :style="`top: ${statusBarHeight}px;height: 500rpx;`">
+		<view class="position-fixed right-0 left-0" :style="`top: ${statusBarHeight}px;height: 500rpx;`">
 			<!-- 关闭按钮 -->
 			<view class="flex justify-center align-center" style="width: 90rpx;height: 90rpx;">
 				<text class="iconfont text-white">&#xe607;</text>
@@ -15,22 +15,51 @@
 
 
 			<!-- 直播间设置 -->
-			<view class="position-absolute rounded bg-main" style="left: 90rpx;right: 100rpx;height: 160rpx;"></view>
+			<view class="position-absolute rounded p-2  flex align-center"
+				style="left: 90rpx;right: 100rpx;height: 160rpx;background-color: rgba(0,0,0,.2);">
+				<view class="position-relative bg-white rounded" style="width: 120rpx;height: 120rpx;">
+					<image class="rounded-circle" style="width: 120rpx;height: 120rpx;" src="/static/gift/4.png"
+						mode=""></image>
+
+					<text class="text-white position-absolute bottom-0 left-0 right-0 font">更换封面</text>
+				</view>
+
+				<view class="flex-1 ml-2">
+					<input class="mb-2 text-white" type="text" placeholder="请输入直播标题">
+					<text class="text-white font">#选择分类</text>
+				</view>
+			</view>
 
 			<!-- 直播特效功能列表 -->
 			<view class="position-absolute right-0 flex flex-column" style="width: 100rpx;">
-				<view style="height: 120rpx;" class="flex flex-column align-center justify-center bg-info"></view>
-				<view style="height: 120rpx;" class="flex flex-column align-center justify-center bg-info"></view>
-				<view style="height: 120rpx;" class="flex flex-column align-center justify-center bg-info"></view>
-				<view style="height: 120rpx;" class="flex flex-column align-center justify-center bg-info"></view>
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center">
+					<text class="iconfont text-white mb-1">&#xe605;</text>
+					<text class="text-white font">翻转</text>
+				</view>
+
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center">
+					<text class="iconfont text-white mb-1">&#xe60c;</text>
+					<text class="text-white font">画质</text>
+				</view>
+
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center">
+					<text class="iconfont text-white mb-1">&#xe632;</text>
+					<text class="text-white font">美颜</text>
+				</view>
+
+				<view style="height: 120rpx;" class="flex flex-column align-center justify-center">
+					<text class="iconfont text-white mb-1">&#xe631;</text>
+					<text class="text-white font">美白</text>
+				</view>
 			</view>
 		</view>
+
 		<!-- 开启直播按钮 -->
 		<view class="position-fixed bg-main flex justify-center align-center rounded-circle"
 			style="left: 100rpx;right: 100rpx;bottom: 100rpx;height: 120rpx;">
 			<text class="text-white font-md">开始视频直播</text>
 		</view>
-	
+
 
 	</view>
 </template>
