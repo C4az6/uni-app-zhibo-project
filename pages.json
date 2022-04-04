@@ -38,8 +38,14 @@
 			"path": "pages/create-live/create-live",
 			"style": {
 				"app-plus": {
-					"titleNView":false
+					"titleNView": false
 				}
+			}
+
+		}, {
+			"path": "pages/liveroom/liveroom",
+			"style": {
+				"titleNView": false
 			}
 
 		}

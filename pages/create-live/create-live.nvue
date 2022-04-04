@@ -31,7 +31,7 @@
 			</view>
 
 			<!-- 直播特效功能列表 -->
-			<view class="position-absolute right-0 flex flex-column" style="width: 100rpx;">
+			<view class="position-absolute right-0 flex flex-column" style="width: 100rpx;background-color: rgba(0,0,0,.4);">
 				<view style="height: 120rpx;" class="flex flex-column align-center justify-center"
 					@click="switchCamera">
 					<text class="iconfont text-white mb-1">&#xe605;</text>
@@ -57,7 +57,7 @@
 
 		<!-- 开启直播按钮 -->
 		<view class="position-fixed bg-main flex justify-center align-center rounded-circle"
-			style="left: 100rpx;right: 100rpx;bottom: 100rpx;height: 120rpx;">
+			style="left: 100rpx;right: 100rpx;bottom: 100rpx;height: 120rpx;" @click="handleStartLive">
 			<text class="text-white font-md">开始视频直播</text>
 		</view>
 
@@ -128,6 +128,18 @@
 			}
 		},
 		methods: {
+			// 开启视频直播
+			handleStartLive() {
+				let params = {
+					mode: this.livePusherOptions.mode,
+					beauty: this.livePusherOptions.beauty,
+					whiteness: this.livePusherOptions.whiteness,
+					position: this.livePusherOptions.position
+				}
+				uni.navigateTo({
+					url: '/pages/liveroom/liveroom?options=' + JSON.stringify(params)
+				})
+			},
 			// 监听滑块变化
 			handleSliderChange(e) {
 				this.livePusherOptions[this.popupType] = e.detail.value
@@ -203,7 +215,7 @@
 		},
 		onReady() {
 			this.context = uni.createLivePusherContext('livePusher', this);
-			// this.startPreview() 
+			this.startPreview() 
 		}
 	}
 </script>
