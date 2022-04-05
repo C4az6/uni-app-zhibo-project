@@ -16,7 +16,15 @@
 		}, {
 			"path": "pages/my/my",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"app-plus": {
+					"titleNView": {
+						"titleText": "我的",
+						"titleAlign": "left",
+						"buttons": [{
+							"type": "menu"
+						}]
+					}
+				}
 			}
 
 		}, {
